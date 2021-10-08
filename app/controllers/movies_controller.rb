@@ -13,7 +13,11 @@ class MoviesController < ApplicationController
     if params.key? "ratings"
         @ratings_to_show = params["ratings"].keys
     end
-    @movies = Movie.with_ratings(@ratings_to_show)
+    @sort_by = nil
+    if params.key? "sort_by"
+      @sort_by = params["sort_by"]
+    end
+    @movies = Movie.with_ratings(@ratings_to_show, @sort_by)
   end
 
   def new
