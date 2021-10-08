@@ -18,7 +18,7 @@ class MoviesController < ApplicationController
     if params.key? "sort_by"
       session["sort_by"] = params["sort_by"]
     end
-    @ratings_to_show = []
+    @ratings_to_show = @all_ratings
     if session.key? "ratings"
         @ratings_to_show = session["ratings"].keys
     end
