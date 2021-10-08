@@ -7,15 +7,24 @@ class MoviesController < ApplicationController
   end
 
   def index
-    logger.debug "params #{params}"
+    logger.debug "Params: #{params}"
     @all_ratings = Movie.all_ratings
-    @ratings_to_show = []
+    if params["commit"] == "Refresh"
+      session.clear
+    end
     if params.key? "ratings"
-        @ratings_to_show = params["ratings"].keys
+      session["ratings"] = params["ratings"]
+    end
+    if params.key? "sort_by"
+      session["sort_by"] = params["sort_by"]
+    end
+    @ratings_to_show = []
+    if session.key? "ratings"
+        @ratings_to_show = session["ratings"].keys
     end
     @sort_by = nil
-    if params.key? "sort_by"
-      @sort_by = params["sort_by"]
+    if session.key? "sort_by"
+      @sort_by = session["sort_by"]
     end
     @movies = Movie.with_ratings(@ratings_to_show, @sort_by)
   end
