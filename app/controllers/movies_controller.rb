@@ -12,6 +12,16 @@ class MoviesController < ApplicationController
     if params["commit"] == "Refresh"
       session.clear
     end
+    if not params.key? "ratings" and not params.key? "sort_by" and (session.key? "ratings" or session.key? "sort_by")
+      fields = {}
+      ["ratings", "sort_by"].each do |key|
+        if session.key? key
+          fields[key] = session[key]
+        end
+      end
+      session.clear
+      return redirect_to movies_path(fields)
+    end
     if params.key? "ratings"
       session["ratings"] = params["ratings"]
     end
